@@ -1,5 +1,6 @@
 # devops-netology
-Глобальный .gitignore ничего не игнорирует
+Глобальный .gitignore ничего не игнорирует.
+
 /terraform/.gitignore игнорит:
 - поддиректории .terraform/
 - файлы c расширениями .tfstate и .tfstate.*
