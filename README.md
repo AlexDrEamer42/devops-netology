@@ -8,3 +8,5 @@
 - файлы override.tf, override.tf.json, 
 - файлы с именами, заканчивающиеся на _override.tf, _override.tf.json
 - файлы .terraformrc и terraform.rc
+
+Add another line
