@@ -1,1 +1,8 @@
 # Nothing to ignore
+/.idea/.gitignore
+/.idea/devops-netology.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/vcs.xml
