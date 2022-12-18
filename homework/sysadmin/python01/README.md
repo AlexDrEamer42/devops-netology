@@ -62,13 +62,25 @@ for result in result_os.split('\n'):
 
 ### Ваш скрипт:
 ```python
-???
+#!/usr/bin/env python3
+
+import os
+
+bash_command = ["cd ~/repo/devops-netology", "git status"]
+result_os = os.popen(' && '.join(bash_command)).read()
+for result in result_os.split('\n'):
+    if result.find('modified') != -1:
+        prepare_result = result.replace('\tmodified:   ', '')
+        print('~/repo/devops-netology/', prepare_result, sep='')
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-???
+~/repo/devops-netology/test/1.txt
+~/repo/devops-netology/test/2.txt
+~/repo/devops-netology/test/3.txt
 ```
+
 
 ------
 
@@ -78,12 +90,37 @@ for result in result_os.split('\n'):
 
 ### Ваш скрипт:
 ```python
-???
+from sys import argv
+import os
+
+script, path = argv
+
+bash_command1 = ["cd " + str(path), "git status 2> /dev/null"]
+# Проверяем является ли директорией git
+bash_command2 = ["cd " + str(path), "git rev-parse --is-inside-work-tree 2> /dev/null;"]
+
+
+result_os = os.popen(' && '.join(bash_command1)).read()
+result_git_dir = os.popen(' && '.join(bash_command2)).read()
+
+if not result_git_dir:
+    print ('This is not a git repository')
+else:
+    for result in result_os.split('\n'):
+        if result.find('modified') != -1:
+            prepare_result = result.replace('\tmodified:   ', '')
+            print(path, prepare_result, sep='')
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-???
+> python3 repo_test.py ~/repo/devops-netology
+~/repo/devops-netology/test/1.txt
+~/repo/devops-netology/test/2.txt
+~/repo/devops-netology/test/3.txt
+
+> python3 repo_test.py /etc
+This is not a git repository
 ```
 
 ------
@@ -102,13 +139,52 @@ for result in result_os.split('\n'):
 Также, должна быть реализована возможность проверки текущего IP сервиса c его IP из предыдущей проверки. Если проверка будет провалена - оповестить об этом в стандартный вывод сообщением: [ERROR] <URL сервиса> IP mismatch: <старый IP> <Новый IP>. Будем считать, что наша разработка реализовала сервисы: `drive.google.com`, `mail.google.com`, `google.com`.
 
 ### Ваш скрипт:
+
 ```python
-???
+#!/usr/bin/env python3
+
+import socket
+import time
+
+hosts = {"drive.google.com": "1.1.1.1", "mail.google.com": "1.1.1.1", "google.com": "1.1.1.1"}
+
+while True:
+    for host in hosts:
+        host_ip = socket.gethostbyname(host)
+        if host_ip == hosts[host]:
+            print(host,hosts[host])
+        else:
+            print(F'[ERROR] {host} IP mismatch: {hosts[host]} {host_ip}')
+            hosts[host] = host_ip
+    time.sleep(5)
+    print()
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-???
+[ERROR] drive.google.com IP mismatch: 1.1.1.1 142.251.1.194
+[ERROR] mail.google.com IP mismatch: 1.1.1.1 74.125.205.17
+[ERROR] google.com IP mismatch: 1.1.1.1 173.194.73.101
+
+drive.google.com 142.251.1.194
+[ERROR] mail.google.com IP mismatch: 74.125.205.17 74.125.205.18
+[ERROR] google.com IP mismatch: 173.194.73.101 173.194.73.138
+
+drive.google.com 142.251.1.194
+[ERROR] mail.google.com IP mismatch: 74.125.205.18 74.125.205.19
+[ERROR] google.com IP mismatch: 173.194.73.138 173.194.73.102
+
+drive.google.com 142.251.1.194
+[ERROR] mail.google.com IP mismatch: 74.125.205.19 74.125.205.18
+[ERROR] google.com IP mismatch: 173.194.73.102 173.194.73.138
+
+drive.google.com 142.251.1.194
+[ERROR] mail.google.com IP mismatch: 74.125.205.18 74.125.205.17
+google.com 173.194.73.138
+
+drive.google.com 142.251.1.194
+[ERROR] mail.google.com IP mismatch: 74.125.205.17 74.125.205.83
+[ERROR] google.com IP mismatch: 173.194.73.138 173.194.73.102
 ```
 
 ------
